@@ -1,6 +1,6 @@
 //
 //  UIViewController+DialogPresentation.m
-//  NumberPress
+//  DPDialog
 //
 //  Created by David Pettigrew on 5/9/13.
 //  Copyright (c) 2013 LifeCentrics, LLC. All rights reserved.
@@ -62,11 +62,11 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
 }
 
 #pragma mark Dialog presentation
-- (void)presentDialogFromSide:(DialogView *)dialogView {
+- (void)presentDialogFromSide:(DPDialogView *)dialogView {
     [self presentDialog:dialogView fromSide:Random];
 }
 
-- (void)presentDialog:(DialogView *)dialogView fromSide:(Side)side {
+- (void)presentDialog:(DPDialogView *)dialogView fromSide:(Side)side {
     self.presentationStartDate = [NSDate date];
     [dialogView show];
     
@@ -88,7 +88,7 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
     self.isDisplayingModalDialog = YES;
 }
 
-- (void)dismissDialog:(DialogView *)dialogView toSide:(Side)side withCompletion:(void (^)(BOOL finished))completion {
+- (void)dismissDialog:(DPDialogView *)dialogView toSide:(Side)side withCompletion:(void (^)(BOOL finished))completion {
     self.presentationStartDate = [NSDate date];
     [UIView animateWithDuration:.5 animations:^{
         [dialogView setEasingFunction:BackEaseIn forKeyPath:@"center"];
@@ -114,7 +114,7 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
     self.isDisplayingModalDialog = NO;
 }
 
-- (void)dismissDialog:(DialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion {
+- (void)dismissDialog:(DPDialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion {
     [self dismissDialog:dialogView toSide:Random withCompletion:completion];
 }
 
@@ -149,7 +149,7 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
     self.isDisplayingModalDialog = NO;
 }
 
-- (void)presentDialogView:(DialogView *)dialogView fromPoint:(CGPoint)point {
+- (void)presentDialogView:(DPDialogView *)dialogView fromPoint:(CGPoint)point {
     self.presentationStartDate = [NSDate date];
     // Prepare for the animation (inital position & transform)
     dialogView.center = point;
@@ -177,7 +177,7 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
     [dialogView setNeedsDisplay];
 }
 
-- (void)dismissDialogByShrinking:(DialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion {
+- (void)dismissDialogByShrinking:(DPDialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion {
     [UIView animateWithDuration:0.25 animations:^{
         dialogView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 1.0);
     } completion:^(BOOL finished) {
@@ -190,48 +190,8 @@ static char const * const kPresentationStartDateKey = "kPresentationStartDateKey
     self.isDisplayingModalDialog = NO;
 }
 
-- (void)presentRoundedDialogView:(RoundedDialog *)roundedDialog fromPoint:(CGPoint)point {
-    self.presentationStartDate = [NSDate date];
-    // Prepare for the animation (inital position & transform)
-    roundedDialog.center = point;
-    roundedDialog.alpha = 0.0;
-    [roundedDialog.dialogView show];
-    
-    // Animate!
-    
-    [UIView animateWithDuration:0.1 animations:^{roundedDialog.alpha = 1.0;}];
-    
-    roundedDialog.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1.0);
-    
-    CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-    bounceAnimation.values = [NSArray arrayWithObjects:
-                              [NSNumber numberWithFloat:0.5],
-                              [NSNumber numberWithFloat:1.1],
-                              [NSNumber numberWithFloat:0.8],
-                              [NSNumber numberWithFloat:1.0], nil];
-    bounceAnimation.duration = 0.3;
-    bounceAnimation.removedOnCompletion = NO;
-    [roundedDialog.layer addAnimation:bounceAnimation forKey:@"bounce"];
-    
-    roundedDialog.layer.transform = CATransform3DIdentity;
-    self.isDisplayingModalDialog = YES;
-}
-
-- (void)dismissRoundedDialogByShrinking:(RoundedDialog *)roundedDialog withCompletion:(void (^)(BOOL finished))completion {
-    [UIView animateWithDuration:0.25 animations:^{
-        roundedDialog.layer.transform = CATransform3DMakeScale(0.0, 0.0, 1.0);
-    } completion:^(BOOL finished) {
-        roundedDialog.layer.transform = CATransform3DIdentity;
-        [roundedDialog.dialogView dismiss];
-        if (completion) {
-            completion(YES);
-        }
-    }];
-    self.isDisplayingModalDialog = NO;
-}
-
 #pragma mark 
-- (void)dismissDialogByShrinking:(DialogView *)dialogView afterMinimumTime:(NSTimeInterval)minTimeInterval withCompletion:(void (^)(BOOL finished))completion {
+- (void)dismissDialogByShrinking:(DPDialogView *)dialogView afterMinimumTime:(NSTimeInterval)minTimeInterval withCompletion:(void (^)(BOOL finished))completion {
     NSTimeInterval timeInterval = fabsf([self.presentationStartDate timeIntervalSinceNow]);
     if (timeInterval > minTimeInterval) {
         [self dismissDialogByShrinking:dialogView withCompletion:completion];

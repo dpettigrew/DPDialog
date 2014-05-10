@@ -1,14 +1,14 @@
 //
 //  UIViewController+DialogPresentation.h
-//  NumberPress
+//  DPDialog
 //
 //  Created by David Pettigrew on 5/9/13.
 //  Copyright (c) 2013 LifeCentrics, LLC. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "DialogView.h"
-#import "RoundedDialog.h"
+#import "DPDialogView.h"
+#import "DPRoundedDialog.h"
 
 typedef enum Side {
     Left, Top, Right, Bottom, Random
@@ -19,20 +19,17 @@ typedef enum Side {
 @property BOOL isDisplayingModalDialog;
 @property (nonatomic, retain) NSDate *presentationStartDate;
 
-- (void)presentDialog:(DialogView *)dialogView fromSide:(Side)side;
-- (void)presentDialogFromSide:(DialogView *)dialogView;
-- (void)dismissDialog:(DialogView *)dialogView toSide:(Side)side withCompletion:(void (^)(BOOL finished))completion;
-- (void)dismissDialog:(DialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion;
+- (void)presentDialog:(DPDialogView *)dialogView fromSide:(Side)side;
+- (void)presentDialogFromSide:(DPDialogView *)dialogView;
+- (void)dismissDialog:(DPDialogView *)dialogView toSide:(Side)side withCompletion:(void (^)(BOOL finished))completion;
+- (void)dismissDialog:(DPDialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion;
 
-- (void)presentDialogView:(DialogView *)dialogView fromPoint:(CGPoint)point;
-- (void)dismissDialogByShrinking:(DialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion;
-
-- (void)presentRoundedDialogView:(RoundedDialog *)dialogView fromPoint:(CGPoint)point;
-- (void)dismissRoundedDialogByShrinking:(RoundedDialog *)dialogView withCompletion:(void (^)(BOOL finished))completion;
+- (void)presentDialogView:(DPDialogView *)dialogView fromPoint:(CGPoint)point;
+- (void)dismissDialogByShrinking:(DPDialogView *)dialogView withCompletion:(void (^)(BOOL finished))completion;
 
 - (void)animatedPresentation:(UIView *)uiView;
 - (void)animatedDismissal:(UIView *)uiView withCompletion:(void (^)(BOOL finished))completion;
 
-- (void)dismissDialogByShrinking:(DialogView *)dialogView afterMinimumTime:(NSTimeInterval)minTimeInterval withCompletion:(void (^)(BOOL finished))completion;
+- (void)dismissDialogByShrinking:(DPDialogView *)dialogView afterMinimumTime:(NSTimeInterval)minTimeInterval withCompletion:(void (^)(BOOL finished))completion;
 
 @end

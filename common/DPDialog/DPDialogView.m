@@ -8,11 +8,10 @@
 
 #import "DPDialogView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "AGWindowView.h"
 
 @interface DPDialogView ()
 
-@property (nonatomic, strong) AGWindowView *windowView;
+@property (nonatomic, strong) UIView *windowView;
 
 @end
 
@@ -36,14 +35,14 @@
 }
 
 - (void)show {
-    self.windowView = [[AGWindowView alloc] initAndAddToKeyWindow];
-    self.windowView.supportedInterfaceOrientations = AGInterfaceOrientationMaskLandscape;
+    self.windowView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.windowView addSubview:self];
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.windowView];
 }
 
 - (void)dismiss {
     [self removeFromSuperview];
-    [self.windowView fadeOutAndRemoveFromSuperview:nil];
+    [self.windowView removeFromSuperview];
 }
 
 
